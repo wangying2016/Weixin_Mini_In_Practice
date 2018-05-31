@@ -3,7 +3,7 @@ var i = 1;
 'Hello, world';
 var x = 1; var y = 2;
 
-if (2 >1) {
+if (2 > 1) {
   console.log("语句1");
   console.log("语句2");
 }
@@ -38,7 +38,7 @@ const PI = 3.14;
 -99; // 负数
 NaN; // NaN表示Not a Number，当无法计算结果时用NaN表示
 Infinity; // Infinity表示无限大，当数值超过了JavaScript的
-          // Number所能表示的最大值时，就表示未Infinity
+          // Number所能表示的最大值时，就表示为Infinity
 
 1 + 2; // 结果为3
 (1 + 2) * 5 / 2; // 结果为7.5
@@ -76,7 +76,7 @@ s[7];
 s[12];
 s[13]; // undefined 超出范围的索引不会报错，但一律返回 undefined
 
-// s[1] = 'a'; 报错
+// s[1] = 'a'; // 报错，字符串索引不能修改值
 
 // indexOf()
 var str = "hello world";
@@ -145,7 +145,7 @@ var arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 // 从索引0开始，到索引3结束，但不包括索引3：['A', 'B', 'C']
 arr.slice(0, 3);
 
-// 从索引3开始到结束：['D', 'E', 'F', '6']
+// 从索引3开始到结束：['D', 'E', 'F', 'G']
 arr.slice(3);
 
 var arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
@@ -260,7 +260,7 @@ var xiaoming = {
 };
 console.log('name' in xiaoming);  // 输出true
 
-'toString' in xiaoming; // true
+'toString' in xiaoming; // true，继承 object 而来
 
 var xiaoming = {
   name: '小明'
@@ -279,8 +279,8 @@ txt2 = "world";
 txt3 = txt1 + " " + txt2; // ；连接了txt1，空格，txt2
 
 // 比较运算符
-false == 0; // true
-false === 0; // false
+false == 0; // true，自动转换类型
+false === 0; // false，不转换类型
 
 NaN == NaN; // false
 
