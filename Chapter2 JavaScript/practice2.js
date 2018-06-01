@@ -202,8 +202,8 @@ for (var key in o) {
 // for in 循环数组的所有元素
 var a = ['A', 'B', 'C'];
 for (var i in a){
-    console.log(i);
-    console.log(a[i]);
+    console.log(i); // '0', '1', '2'
+    console.log(a[i]); // 'A', 'B', 'C'
 }
 // while 循环
 var x = 0;
@@ -247,3 +247,252 @@ for (var x of m) {
     // 依次输出 ['小明', 95], ['张三', 75], ['李四', 85]]
     console.log(x);
 }
+
+// 定义函数
+// 第一种定义方式
+function abs(x) {
+    if (x >= 0) {
+        return x;
+    } else {
+        return -x;
+    }
+}
+// 第二种定义方式
+var abs = function(x) {
+    if (x > 0) {
+        return x;
+    } else {
+        return -x;
+    }
+};
+
+// 调用函数
+Page({
+
+    OnLoad: function() {
+        console.log(abs(-9));   // 输出 9
+        console.log(abs(10));   // 输出 10
+    }
+})
+var abs = function(x) {
+    if (x >= 0) {
+        return x;
+    } else {
+        return -x;
+    }
+};
+// 避免参数接受到 undefined
+function abs(x) {
+    if (typeof x !== 'number') {
+        throw 'Not a number';   // 抛出异常，终止运行
+    }
+    if (x >= 0) {
+        return x;
+    } else {
+        return -x;
+    }
+}
+// 导出函数
+module.export = {
+    formatTime: formatTime
+}
+// 导入函数
+var util = require('../../utils/util.js');
+utils.formatTime();
+import util from '../../utils';
+
+// arguments 参数
+Page({
+    onLoad: function() {
+      foo("haha", "hehe", "heihei");
+    }
+})
+function foo(x) {
+    for (var i = 0; i < arguments.length; i ++) {
+        // 依次输出 haha, hehe, heihei
+        console.log(arguments[i]);
+    }
+}
+function abs() {
+    if (arguments.length === 0) {
+        return 0;
+    }
+    var x = arguments[0];
+    return x >= 0 ? x : -x;
+}
+abs();  // 0
+abs(10); // 10;
+abs(-9);  // 9
+// foo(a[, b], c)
+// 接收 2 ~ 3 个参数，b 是可选参数，如果只传两个采纳数，则 b 默认为 null
+function foo(a, b, c) {
+    if (arguments.length == 2) {
+        // 实际拿到的参数是 a 和 b，c 为 undefined
+        c = b;  // 把 b 赋给 c
+        b = null;   // b 变为默认值
+    }
+}
+
+// rest 参数
+Page({
+    onLoad: function() {
+      console.log(test());
+    }
+})
+function test() {
+    return { name: 'test'};
+}
+// 拆分两行，出错
+function test() {
+    return  // JavaScript 引擎自动在行末加了分号
+        { name: 'test'};
+}
+// 正确的多行语句的写法
+function test() {
+    return {
+        name: 'test'
+    };
+}
+
+// 变量作用域
+// 函数体内部声明的变量，在函数体外不能引用
+function foo() {
+    var x = 1;
+    x = x + 1;
+}
+x = x + 2;  // ReferenceError!
+// 内部函数可以访问外部函数定义的变量
+function foo() {
+    var x = 1;
+    function bar() {
+        var y = x + 1;  // bar 可以访问 foo 的变量 x
+    }
+    var z = y + 1;  // ReferenceError!
+}
+
+// 方法
+Page({
+    onLoad: function() {
+      console.log(zhangsan.age);  // 输出方法 function age() { return 18 }
+      console.log(zhangsan.age());// 输出 18
+    }
+})
+var zhangsan = {
+    age: function() {
+      return 18;
+    }
+};
+
+// this 变量
+Page({
+    
+    onLoad: function() {
+        console.log(lisi.age());
+        console.log(getAge());
+    }
+})
+function getAge() {
+    var y = new Date().getFullYear();
+    return y - this.birth;
+}
+var list = {
+    name: 'lisi',
+    birth: 1990,
+    age: getAge
+};
+// apply() 控制 this 指向
+console.log(getAge(list,[]));
+
+// 高阶函数
+// map 函数
+function pow(x) {
+    return x * x;
+}
+var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+arr.map(pow);   // [1, 4, 9, 16, 25, 36, 49, 64, 81]
+// reduce 函数
+// 数组的 reduce() 把一个函数作用在这个数组的元素上，这个
+// 函数必须接收两个采纳数，reduce() 把结果继续和序列的下一
+// 个元素做累积计算
+[x1, x2, x3, x4].reduce(f) = f(f(f(x1, x2), x3), x4)
+// reduce 实现数组求和
+var arr = [1, 3, 5, 7, 9];
+arr.reduce(function(x, y) {
+    return x + y;
+});
+// filter 函数
+var arr = [1, 2, 4, 5, 6, 9, 10, 15];
+var r = arr.filter(function(x) {
+    return x % 2 !== 0;
+});
+r;  // [1, 5, 9, 15]
+// sort 函数
+var arr = [10, 20, 1, 2];
+arr.sort(function(x, y) {
+    if (x < y) {
+        return -1;
+    }
+    if (x > y) {
+        return 1;
+    }
+    return 0;
+}); // [1, 2, 10, 20]
+
+// Arrow Function 箭头函数
+x => x* x;
+// 上面这行代码相当于
+function (x) {
+    return x * x;
+}
+
+// JavaScript 标准对象
+// typeof
+typeof 123; // 'number'
+typeof NaN; // 'number'
+typeof 'str';   // 'string'
+typeof true;    // 'boolean'
+typeof undefined;   // 'undefined'
+typeof Math.abs;    // 'function'
+typeof null;    // 'object'
+typeof [];  // 'object'
+typeof {};  // 'object'
+// Date
+var myDate = new Date();
+var d = new Date(2017, 0, 9, 8, 15, 30, 100);   // 传入 2017 年 1 月 9 日 8 点 15 分 30 秒 100 毫秒
+console.log(d);
+var d = new Date(1324123412341);    // 传入距离 1970 年 1 月 1 日 0 点的毫秒值
+console.log(d);
+// Date 对象方法
+var now = new Date();
+now.getFullYear();  // 获取年
+now.getMonth(); // 获取月份，0 表示 1，范围为 0 ~ 11
+now.getDate();  // 获取日期，比如 9 号
+now.getDay();   // 获取星期书，如星期三，返回 3
+now.getHours(); // 获取小时数，24 小时制
+now.getMinutes();   // 获取分钟数
+now.getSeconds();   // 获取秒数
+now.getMilliseconds();  // 获取毫秒
+now.getTime();  // 以 number 形式表示的时间戳，距离 1970 年 1 月 1 日 0 点的毫秒值
+// RegExp
+var re1 = /ABC\-001/;
+var re2 = new RegExp('ABC\\-001');
+// RegExp 的 test() 方法
+var re = /^\d{3}\-\d{3,8}$/;
+re.test('010-12345'); // true
+re.test('010-1234x'); // false
+re.test('010 12345'); // false
+// JSON: JavaScript Object Notation
+var zhangsan = {
+    name: '张三',
+    age: 18
+};
+// stringify() 把 JavaScript 对象转换成 JSON 格式
+JSON.stringify(zhangsan);   // {"name": "张三", "age": 18}
+// parse() 把 JSON 格式的字符串转换成 JavaScript 对象
+JSON.parse('{"name": "张三", "age": 18}');
+// Math
+var a = -10;
+Math.abs(a);    // 取绝对值，10
+
+
+
