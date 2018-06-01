@@ -1,0 +1,320 @@
+// 数据绑定
+// 内容绑定
+// index.js
+Page({
+    data: {
+        message: 'Hello 微信小程序'
+    }
+})
+<!--index.wxml-->
+<view> {{ message }} </view>
+// 组件属性绑定
+// index.js
+Page({
+    data: {
+        id: 0
+    }
+})
+<!--index.wxml-->
+<view id="item-{{id}}"></view>
+// 控制属性绑定
+// index.js
+Page({
+    data: {
+        condition: true
+    }
+}) 
+<!--index.wxml-->
+<view wx:if="{{condition}}"></view>
+// 关键字绑定
+<checkbox checked="{{false}}"></checkbox>
+// 三元运算
+<view hidden="{{flag ? true: false}}"> Hidden </view>
+// 算数运算
+<!--index.wxml-->
+<view>{{a + b}} + {{c}} + d<view>
+// index.js
+Page({
+    data: {
+        a: 1,
+        b: 2,
+        c: 3
+    }
+})
+// 逻辑判断
+<view wx:if="{{length > 5}}"></view>
+// 字符串运算
+<view>{{"hellow" + name}}</view>
+Page({
+    data: {
+        name: '微信小程序'
+    }
+})
+// 数据路径运算
+<view>{{object.key}} {{array[0]}}</view>
+Page({
+    data: {
+        object: {
+            key: 'Hello '
+        }
+        array: ['小程序']
+    }
+})
+// 组合
+<view wx:for="{{zero, 1, 2, 3 ,4]}}">{{item}}</view>
+Page({
+    data: {
+        zero: 0
+    }
+})
+<template is="objectCombine" data="{{for: a, bar: b}}"></template>
+Page({
+    data: {
+        a: 1,
+        b: 2
+    }
+})
+// ...扩展运算符
+<template is="objectCombine" data="{{...obj1, ...obj2, e: 5}}"></template>
+Page({
+    data: {
+        obj1: {
+            a: 1,
+            b: 2
+        },
+        obj2: {
+            c: 3,
+            d: 4
+        }
+    }
+})
+// 简接表达
+<template is="objectCombine" data="{{foo, bar}}"></template>
+Page({
+    data: {
+        foo: 'my-foo',
+        bar: 'my-bar'
+    }
+})
+
+// 条件渲染
+// wx:if="{{condition}}"
+<view wx:if="{{condition}}">True</view>
+// wx:elif 和 wx:else
+<!--index.wxml-->
+<view wx:if="{{length > 5}}"> 1 </view>
+<view wx:elif="{{length > 2}}"> 2 </view>
+<view wx:else> 3 </view>
+// index.js
+Page({
+    data: {
+        length: 4
+    }
+})
+// block wx:if
+<block wx:if="{{true}}">
+    <view> view1 </view>
+    <view> view2 </view>
+</block>
+// hidden: 默认为 true
+<view hidden="{{true}}"> {{message}} </view>
+<view hidden> {{message}} </view>
+
+// 列表渲染
+<!-- index.wxml -->
+<view wx:for="{{array}}">
+  {{index}}: {{item.message}}
+</view>
+// index.js
+Page({
+  data: {
+    array: [{
+      message: 'foo',
+    }, {
+      message: 'bar',
+    }]
+  }
+})
+// 使用 wx:for-item 指定数组当前元素的变量名，使用 wx:for-index 指定数组当前下标的变量名
+<view wx:for="{{array}}" wx:for-index="idx" wx:for-item="itemName">
+    {{idx}}: {{itemName.message}}
+</view>
+// wx:for 嵌套实现九九乘法表
+<view wx:for="{{[1, 2, 3 ,4 , 5, 6, 7, 8, 9]}}" wx:for-item="i">
+  <view wx:for="{{[1, 2, 3, 4, 5, 6, 7, 8, 9]}}" wx:for-item="j">
+    {{i}} * {{j}} = {{i * j}}
+  </view>
+</view>
+// 使用 block 标签
+<block wx:for="{{[1, 2, 3]}}">
+  <view>{{index}}</view>
+  <view>{{item}}</view>
+</block>
+// wx:key
+<!-- index.wxml -->
+<switch wx:for="{{objectArray}}" wx:key="unique" style="display:block;">{{item.id}}</switch>
+<button bindtap="switch"> Switch </button>
+// index.js
+Page({
+  data: {
+    objectArray: [
+      { id: 5, unique: 'unique_5' },
+      { id: 4, unique: 'unique_4' },
+      { id: 3, unique: 'unique_3' },
+      { id: 2, unique: 'unique_2' },
+      { id: 1, unique: 'unique_1' },
+      { id: 0, unique: 'unique_0' },
+    ]
+  },
+  switch: function (e) {
+    // 获取数组的长度
+    const length = this.data.objectArray.length;
+    // 随机交换顺序
+    for (let i = 0; i < length; i++) {
+      const x = Math.floor(Math.random() * length);
+      const y = Math.floor(Math.random() * length);
+      const temp = this.data.objectArray[x];
+      this.data.objectArray[x] = this.data.objectArray[y];
+      this.data.objectArray[y] = temp
+    }
+    // 修改 data 数组，刷新界面
+    this.setData({
+      objectArray: this.data.objectArray
+    })
+  }
+})
+
+// 模板
+<!--index.wxml-->
+<template is="msgItem" data="{{...item}}}"/>
+<!--
+    index: int
+    msg: string
+    time: string
+-->
+<template name="msgItem">
+    <view>
+        <text>{{index}}: {{msg}}</text>
+        <text>Time: {{time}}</text>
+    </view>
+</template>
+// index.js
+Page({
+    data: {
+        item: {
+            index: 0,
+            msg: '这是一个模板',
+            time: '2017-06-01'
+        }
+    }
+})
+// 动态决定使用哪个模板
+<template name="odd">
+    <view> odd </view>
+</template>
+<template name="even">
+    <view> even </view>
+</template>
+<block wx:for="{{[1, 2, 3, 4, 5]}}">
+    <template is="{{item % 2 == 0 ? 'even' : 'odd'}}"/>
+</block>
+
+// 事件
+// 事件的使用方式
+<!--index.wxml-->
+<view id="tapTest" data-hi="WeChat" bindtap="tapName"> Click me! </view>
+// index.js
+Page({
+    tapName: function(event) {
+        // 输出日志
+        console.log(event)
+    }
+})
+// 冒泡事件
+<view id="outter" bindtap="handleTap1">
+    outter view
+    <view id="middle" catchtap="handleTap2">
+        middle view
+        <view id="inner" bindtap="handleTap3">
+            inner view
+        </view>
+    </view>
+</view>
+
+// 引用
+// import
+<!--item.wxml-->
+<template name="item">
+    <view>{{text}}</view>
+</template>
+<!--index.wxml-->
+<import src="item.wxml"/>
+<template is="item" data="{{text: 'forbar'}}"/>
+// import 不具有传递性
+<!--A.wxml-->
+<template name="A">
+    <text> A template </text>
+</template>
+<!--B.wxml-->
+<import src="a.wxml"/>
+<template name="B">
+    <text> B template </text>
+</template>
+<!--C.wxml-->
+<import src="b.wxml"/>
+<template is="A"/>  <!--报错不能使用 A.wxml 的模板-->
+<template is="B"/>
+// include
+<!--index.wxml-->
+<include src="header.wxml"/>
+<view> body </view>
+<include src="footer.wxml"/>
+<!--header.wxml-->
+<view> header </view>
+<!--footer.wxml-->
+<view> footer </view>
+
+// WXSS
+// 注释
+/* 这是个注释 */
+view {
+    color: blue;
+}
+/* 使用 #id 选择器 */
+#v {
+  color:red;
+}
+/* 使用 .class 选择器 */
+.red {
+  color:red;
+}
+/* 使用 element 选择器 */
+view {
+  color:red;
+}
+// 使用 .class 选择器，可以让一个组将拥有多个 .class 的样式
+<!--wxml-->
+<view class="red whiteBg"> 红色字体 </view>
+// WXSS 基本属性
+<!--wxml-->
+<view>小程序</view>
+/* WXSS */
+view {
+    width:200rpx;
+    height: 200rpx;
+    background-color:blue;
+    color:red;
+    font-size: 50rpx;
+}
+/* WXSS样式导入 **/
+/** common.wxss **/
+.small-p {
+    padding:5px;
+}
+/** app.wxss **/
+@import "common.wxss";
+.middle-p {
+    padding:15px;
+}
+/** WXSS内联样式 **/
+<view style="color:{{color}};"/>
