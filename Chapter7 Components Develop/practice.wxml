@@ -1,0 +1,52 @@
+// 组件
+<tagname property="value">
+    // Content goest here...
+</tagname>
+
+// 视图容器组件
+// view
+<!--index.wxml-->
+<view class="viewTitle">
+  <text>View 展示</text>
+</view>
+<!-- 样式一，横向排列 -->
+<view class="section">
+  <view class="section_title">样式一，横向排列</view>
+  <view class="flex-wrp">
+    <view class="flex-item bc_green">111</view>
+    <view class="flex-item bc_red">222</view>
+    <view class="flex-item bc_blue">333</view>
+  </view>
+</view>
+<!-- 样式二，竖向排列 -->
+<view class="section">
+  <view class="section_title">样式二，竖向排列</view>
+  <view class="flex-wrp" style="height:300px">
+    <view class="flex-item bc_green" style="margin-top: 0px">111</view>
+    <view class="flex-item bc_red" style="margin-top: 200rpx">222</view>
+    <view class="flex-item bc_blue" style="margin-top: 400rpx">333</view>
+  </view>
+</view>
+/**index.wxss**/
+.flex-wrp {
+  height: 200rpx;
+  display: flex;
+  background-color: #ffffff;
+}
+.flex-item {
+  width: 200rpx;
+  height: 200rpx;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.bc_green {
+  background-color: #09BB07;
+}
+.bc_red {
+  background-color: #F76260;
+}
+.bc_blue {
+  background-color: #10AEFF;
+}
