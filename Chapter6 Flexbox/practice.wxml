@@ -1,0 +1,129 @@
+// 容器属性
+<view class="container">
+  <view class="child"></view>
+  <view class="child"></view>
+  <view class="child"></view>
+  <view class="child"></view>
+</view>
+
+// display
+// 使用 display: flex 或 display: inline-flex 来定义容器
+// 为伸缩容器
+.container {
+    display: flex | inline-flex;
+}
+// 常用的三个 display 属性
+.container {
+    display: block | inline | inline-block;
+}
+
+// flex-direction: 决定了主轴的方向，子元素会沿着这个方向
+// 添加到容器中
+.container {
+    flex-direction: row | row-reverse | column | column-reverse;
+}
+
+// flex-wrap：决定了子元素是单行显示还是多行显示，如果为多行，
+// 则换行方向与侧轴方向一致
+.container {
+    flex-wrap: nowrap | wrap | wrap-reverse;
+}
+
+// flex-flow：为 flex-direction 与 flex-wrap 的缩写版本
+.container {
+    flex-flow: row nowrap;
+}
+
+// justify-content：用来定义伸缩项目沿主轴的对其方式，主要
+// 表现为在项目不能伸缩或已经达到伸缩最大值时，对多余的空白
+// 空间进行分配
+.container {
+    justify-content: flex-start | flext-end | center | space-between | space-around;
+}
+
+// align-items：决定了子元素在侧轴上的对齐方式
+.container {
+    align-items: flex-start | flex-end | center | stretch | baseline;
+}
+
+// align-content：用来调整当子元素在容器中的对齐方式，只在行数
+// 大于 1 的布局中有效
+.container {
+    align-content: flex-start | flex-end | center | space-between | space-around;
+}
+
+// 子元素属性
+<view class="container">
+  <view class="child"></view>
+  <view class="child"></view>
+  <view class="child"></view>
+  <view class="child"></view>
+</view>
+
+// order：改变子元素排列顺序
+.child {
+    order: 1;
+}
+
+// flex-grow：定义了子元素的扩展能力，数值越大在布局中占的比例越大
+.child {
+    flex-grow: 2;
+}
+
+// flex-shrink：定义了子元素收缩的能力
+.child {
+    flex-shrink: 2;
+}
+
+// flex-basis：定义伸缩的基准值，项目会按照这个比例进行伸缩
+.child {
+    flex-basis: 0 | auto;
+}
+
+// flex：前面三种属性的缩写
+.child {
+    flex: 1;
+}
+
+// alignd-self：用来覆盖父组件样式中的 alignItems 的值，使
+// 子元素拥有自己想要的对齐方式
+.child {
+    align-self: flex-end;
+}
+
+// position 属性
+// index.wxml
+<!--index.wxml-->
+<view class="center-view">
+  <view class="red">red
+    <view class="green"/>
+  </view>
+</view>
+// index.wxss
+/**index.wxss**/
+.center-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%
+}
+.red {
+  display: flex;
+  height: 800rpx;
+  background-color: red;
+  width: 600rpx;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  font-size: 40rpx;
+  position: relative;
+}
+.green {
+  height: 200rpx;
+  background-color: green;
+  width: 200rpx;
+  position: absolute;
+  top: 100rpx;
+  left: 100rpx;
+}
+
