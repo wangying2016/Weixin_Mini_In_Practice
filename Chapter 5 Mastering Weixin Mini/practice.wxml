@@ -1,0 +1,125 @@
+// App()：微信小程序注册程序函数，指定微信小程序的生命周期函数
+App({
+    onLaunch: function() {
+        // 启动时执行的初始化方法
+    },
+    onShow: function() {
+        // 小程序进入前台时执行的方法
+    },
+    onHide: function() {
+        // 小程序进入后台时执行的方法
+    },
+    onError: function(msg) {
+        console.log(msg);
+    },
+    globalData: 'I am global data'
+})
+// getApp() 函数：获取小程序实例
+var appInstance = getApp();
+console.log(appInstance.globalData);
+
+// 页面的事件处理函数
+// *.js
+Page({
+    viewTap: function() {
+        console.log('view tap');
+    }
+})
+// *.wxml
+// <view bindtap="viewtap"> click me </view>
+
+// 数据的初始化
+// *.js
+Page({
+    data: {
+        text: 'init data',  // 初始化一个字符串
+        array: [{msg: '1'}, {msg: '2'}] // 初始化一个数组
+    }
+})
+// *.wxml
+<view>{{text}}</view>       // 绑定并显示字符串
+<view>{{array[0].msg}}</view>   // 绑定并显示数组元素
+
+// 数据的设置及展现
+// *.js
+Page({
+    data: {
+        text: 'init data',
+        array: [{text: 'init data'}],
+        object: {
+            text: 'init data'
+        }
+    },
+    changeText: function() {
+        // this.data.text = 'chanted data';     // bad, it can not work
+        this.setData() {
+            text: 'changed data'
+        }
+    },
+    changeItemInArray: function() {
+        // you can use this way to modify a danamic data path
+        this.setData ({
+            'array[0].text': 'changed data'
+        });
+    },
+    changedItemInObject: function() {
+        this.setData({
+            'object.text': 'changed data'
+        });
+    },
+    addNewFiled: function() {
+        this.setData({
+            'newFiled.text': 'new data'
+        })
+    }
+})
+// *.wxml
+<view>{{text}}</view>
+<button bindtap="changeText"> Change normal data </button>
+<view>{{array[0].text}}</view>
+<button bindtap="changeItemInArray"> Change Array data </button>
+<view>{{object.text}}</view>
+<button bindtap="changeItemInObject"> Change Object data </button>
+<view>{{newField.text}}</view>
+<button bindtap="addNewFiled"> Add new data </button>
+
+// 文件作用域：通过 getApp() 函数可以获取全局的应用实例，如果需要
+// 全局的数据，则可以在 App() 中设置
+// app.js
+App({
+  globalData: 1
+})
+// a.js
+// localValue 变量，只在 a.js 中有效
+var localValue = 'a';
+// 获取 App 实例
+var app = getApp();
+// 获取全局数值并修改
+app.globalData++;
+// b.js
+var localValue = 'b';
+// 如果 a.js 在 b.js 之前运行，则此时的 globalData 的数值为 2
+console.log(getApp().globalData);
+
+// 模块化
+// common.js
+// 定义接口
+function sayHello(name) {
+    console.log(`hello ${name}!`);
+}
+function sayGoodbye(name) {
+    console.log(`Goodbye ${name}!`);
+}
+// 对外暴露接口
+module.exports.sayHello = sayHello;
+exports.sayGoodbye = sayGoodbye;
+// *.js
+var common = require('common.js');
+Page({
+    helloMINA: function() {
+        common.sayHello('MINA');
+    },
+    goodbyeMINA: function() {
+        common.sayGoodBye('MINA');
+    }
+})
