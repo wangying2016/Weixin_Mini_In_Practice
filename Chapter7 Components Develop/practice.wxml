@@ -50,3 +50,880 @@
 .bc_blue {
   background-color: #10AEFF;
 }
+
+// scroll-view：定义一个可滚动的视图区域，里面的内容超过这个区域的宽或高时，
+// 就会出现滚动条
+<!--index.wxml-->
+<view class="viewTitle">
+    <text class="titleName">ScrollView视图展示</text>
+  </view>
+  <!--样式一，竖向滑动-->
+<view class="section">
+    <view class="section__title">样式一，竖向滑动Vertical</view>
+    <view class="flex-wrp">
+    <!--bindscrolltoupper后面的参数可以不写，在.js文件中
+    有对应的交互方法-->
+      <scroll-view scroll-y="true" style="height: 200px;" 
+      bindscrolltoupper="upper" bindscrolltolower="lower" 
+      bindscroll="scroll" scroll-into-view="{{toView}}" 
+      scroll-top="{{scrollTop}}">
+      <!--这里的id用来js中找到对应的显示视图，如果不进行js中data的{{toView}}
+      的数据交互，显示的是蓝黄红绿，如果进行js数据交互，那么初始化时显示的是
+      最下面的绿-->
+        <view id="blue" class="scroll-view-item bc_blue"></view>
+        <view id="yellow"  class="scroll-view-item bc_yellow"></view>
+        <view id="red" class="scroll-view-item bc_red"></view>
+        <view id="green" class="scroll-view-item bc_green"></view>
+      </scroll-view>
+    </view>
+</view>
+<!--样式二，横向滑动-->
+<view class="section">
+    <view class="section__title">样式二，横向滑动Horizontal</view>
+    <view class="flex-wrp">
+    <scroll-view class="scroll-view_H" scroll-x="true" bindscroll="scroll" style="width: 100%">
+        <view id="green" class="scroll-view-item_H bc_green"></view>
+        <view id="red"  class="scroll-view-item_H bc_red"></view>
+        <view id="yellow" class="scroll-view-item_H bc_yellow"></view>
+        <view id="blue" class="scroll-view-item_H bc_blue"></view>
+      </scroll-view>
+    </view>
+</view>
+/**index.wxss**/
+.flex-wrp{
+    height: 200px;
+    display: flex;
+    background-color: #ffffff;
+}
+.scroll-view-item {
+    width: 400px;
+    height: 100px;
+}
+.scroll-view_H{
+  white-space: nowrap;
+}
+.scroll-view-item_H{
+  display: inline-block;
+  width: 100%;
+  height: 200px;
+}
+.bc_green {
+  background-color: #09BB07;
+}
+.bc_red {
+  background-color: #F76260;
+}
+.bc_blue {
+  background-color: #10AEFF;
+}
+.bc_yellow {
+  background-color: yellow;
+}
+
+// swiper
+<!--index.wxml-->
+<view class="viewTitle">
+  <text class="titleName">Swiper 视图展示</text>
+</view>
+<view class="page__bd">
+  <view class="section section_gap swiper">
+    <swiper indicator-dots="{{indicatorDots}}" vertical="{{vertical}}"
+      autoplay="{{autoplay}}" interval="{{interval}}" duration="duration">
+        <block wx:for="{{background}}">
+          <swiper-item>
+            <view class="swiper-item bc_{{item}}"></view>
+          </swiper-item>
+        </block>
+    </swiper>
+  </view>
+</view>
+// index.js
+Page({
+  data: {
+    background: ['green', 'red', 'yellow'],
+    indicatorDots: true,
+    vertical: false,
+    autoplay: true,
+    interval: 3000,
+    duration: 1200
+  },
+})
+/**index.wxss**/
+.swiper-item {
+  width:100%;
+  height:100%;
+}
+.bc_green {
+  background-color: greenyellow;
+}
+.bc_red {
+  background-color: red;
+}
+.bc_yellow {
+  background-color: yellow;
+}
+
+
+// 基础内容组件
+// icon
+<!--index.wxml-->
+<view class="group">
+  <block wx:for="{{iconSize}}">
+    <icon type="success" size="{{item}}"/>
+  </block>
+</view>
+<view class="group">
+  <block wx:for="{{iconType}}">
+    <icon type="{{item}}" size="45"/>
+  </block>
+</view>
+<view class="group">
+  <block wx:for="{{iconColor}}">
+    <icon type="success" size="45" color="{{item}}"/>
+  </block>
+</view>
+// index.js
+Page({
+  data: {
+    iconSize: [20, 30, 40, 50, 60, 70],
+    iconColor: [
+      'red', 'orange', 'yellow', 'green', 'rgb(0,255,255)', 'blue', 'purple'
+    ],
+    iconType: [
+      'success', 'info', 'warn', 'waiting', 'safe_success', 'safe_warn', 
+      'success_circle', 'success_no_circle', 'waiting_circle', 'circle', 'download',
+      'info_circle', 'cancel', 'search', 'clear'
+    ]
+  }
+})
+
+// text
+<!--index.wxml-->
+<view class="btn-area">
+  <view class="body-view">
+    <text>{{text}}</text>
+    <button bindtap="add"> add line </button>
+    <button bindtap="remove"> remove line </button>
+  </view>
+</view>
+// index.js
+var initData = '我是第一行\n我是第二行\n我是第三行';
+var extraLine = [];
+Page({
+  data: {
+    text: initData
+  },
+  add: function(e) {
+    extraLine.push('下一行');
+    this.setData({
+      text: initData + '\n' + extraLine.join('\n')
+    })
+  },
+  remove: function(e) {
+    if (extraLine.length > 0) {
+      extraLine.pop();
+      this.setData({
+        text: initData + '\n' + extraLine.join('\n')
+      })
+    }
+  }
+})
+
+// progress
+<!--index.wxml-->
+<view class="progress-view">
+  <view class="progress-box">
+    <progress percent="20" show-info />
+  </view>
+  <view class="progress-box">
+    <progress percent="40" stroke-width="12" />
+  </view>
+  <view class="progress-box">
+    <progress percent="60" color="pink" />
+  </view>
+  <view class="progress-box">
+    <progress percent="100" active />
+  </view>
+</view>
+/**index.wxss**/
+.progress-view {
+  margin-top:100rpx;
+}
+.progress-box {
+  margin-bottom:60rpx;
+}
+
+
+// 表单组件
+
+// button
+<!--index.wxml-->
+<view class="content">
+  <view class="button_box">
+    <button size="default">Content</button>
+  </view>
+  <view class="button_box">
+    <button size="mini">Content</button>
+  </view>
+  <view class="button_box">
+    <button type="default">Content</button>
+  </view>
+  <view class="button_box">
+    <button type="primary">Content</button>
+  </view>
+  <view class="button_box">
+    <button type="warn">Content</button>
+  </view>
+  <view class="button_box">
+    <button type="primary" plain="true">Content</button>
+  </view>
+  <view class="button_box">
+    <button type="primary" disabled="true">Content</button>
+  </view>
+  <view class="button_box">
+    <button type="primary" loading="true">Content</button>
+  </view>
+  <view class="button_box">
+    <button type="primary" hover-class="none">Content</button>
+  </view>
+</view>
+
+// checkbox
+<!--index.wxml-->
+<view class="container">
+  <view class="page-section-title">多选框默认样式
+  </view>
+  <label class="checkbox">
+    <checkbox value="cb" checked="true">项目一</checkbox>
+  </label>
+  <label class="checkbox">
+    <checkbox value="cb">项目二</checkbox>
+  </label>
+  <label class="checkbox">
+    <checkbox value="cb">项目三</checkbox>
+  </label>
+  <label class="checkbox">
+    <checkbox value="cb">项目四</checkbox>
+  </label>
+  <label class="checkbox">
+    <checkbox value="cb">项目五</checkbox>
+  </label>
+  <label class="checkbox">
+    <checkbox value="cb">项目六</checkbox>
+  </label>
+</view>
+
+// radio
+<!--index.wxml-->
+<radio-group class="radio-group" bindchange="radiochange">
+  <label class="radio">
+    <radio value="{{item.value}}" checked="true">北京</radio>
+  </label>
+  <label class="radio">
+    <radio value="{{item.value}}" checked="true">天津</radio>
+  </label>
+  <label class="radio">
+    <radio value="{{item.value}}" checked="true">上海</radio>
+  </label>
+  <label class="radio">
+    <radio value="{{item.value}}" checked="true">重庆</radio>
+  </label>
+  <label class="radio">
+    <radio value="{{item.value}}" checked="true">深圳</radio>
+  </label>
+  <label class="radio">
+    <radio value="{{item.value}}" checked="true">广州</radio>
+  </label>
+</radio-group>
+
+// input
+<!--index.wxml-->
+<view class="container">
+  <view class="page-section">
+    <view>可以自动聚焦的 input</view>
+    <view class="weui-cells">
+      <input class="weui-input" auto-focus placeholder="将会自动获取焦点"></input>
+    </view>
+  </view>
+  <view class="page-section">
+    <view>控制最大输入长度的 input</view>
+    <view class="weui-cells">
+      <input class="weui-input" maxlength="10" placeholder="最大输入长度为 10"></input>
+    </view>
+  </view>
+  <view class="page-section">
+    <view>实时获取输入值：{{inputValue}}</view>
+    <view class="weui-cells">
+      <input class="weui-input" maxlength="10" bindinput="bindKeyInput" placeholder="输入同步到 view 中"></input>
+    </view>
+  </view>
+  <view class="page-section">
+    <view>控制输入的 input</view>
+    <view class="weui-cells">
+      <input class="weui-input" maxlength="10" bindinput="bindReplaceInput" placeholder="连续的两个 1 会变成2"></input>
+    </view>
+  </view>
+  <view class="page-section">
+    <view>控制键盘的 input</view>
+    <view class="weui-cells">
+      <input class="weui-input" maxlength="10" bindinput="bindHideKeyboard" placeholder="输入123自动收起键盘"></input>
+    </view>
+  </view>
+  <view class="page-section">
+    <view>数字输入的 input</view>
+    <view class="weui-cells">
+      <input class="weui-input" type="number" placeholder="这是一个数字输入框"></input>
+    </view>
+  </view>
+  <view class="page-section">
+    <view>密码输入的 input</view>
+    <view class="weui-cells">
+      <input class="weui-input" type="text" password placeholder="这是一个密码输入框"></input>
+    </view>
+  </view>
+  <view class="page-section">
+    <view>带小数点的 input</view>
+    <view class="weui-cells">
+      <input class="weui-input" type="digit" placeholder="带小数点的数字键盘"></input>
+    </view>
+  </view>
+  <view class="page-section">
+    <view>身份证输入的 input</view>
+    <view class="weui-cells">
+      <input class="weui-input" type="idcard" placeholder="身份证输入键盘"></input>
+    </view>
+  </view>
+  <view class="page-section">
+    <view>控制占位符颜色的 input</view>
+    <view class="weui-cells">
+      <input class="weui-input" placeholder-style="color:#F76260" placeholder="占位符字体是红色的"></input>
+    </view>
+  </view>
+</view>
+// index.js
+Page({
+  data: {
+    inputValue: ''
+  },
+  bindKeyInput: function(e) {
+    this.setData({
+      inputValue: e.detail.value
+    });
+  },
+  bindReplaceInput: function(e) {
+    var value = e.detail.value;
+    var pos = e.detail.cursor;
+    var left;
+    if (pos != -1) {
+      // 光标在中间
+      left = e.detail.value.slice(0, pos);
+      // 计算光标的位置
+      pos = left.replace(/11/g, '2').length;
+    }
+
+    // 直接返回对象，可以对输入进行过滤处理，同时可以控制光标的位置
+    return {
+      value: value.replace(/11/g, '2'),
+      cursor: pos
+    }
+  },
+  bindHideKeyboard: function(e) {
+    if (e.detail.value === '123') {
+      // 收起键盘
+      wx.hideKeyboard();
+    }
+  }
+})
+/**index.wxss**/
+.container {
+  background-color:lightgrey;
+}
+.page-section {
+  margin-bottom: 20rpx;
+  width: 100%;
+}
+.weui-cells {
+  position: relative;
+  margin-top: 1.17647059em;
+  background-color:#ffffff;
+  line-height: 1.41176471;
+  font-size: 17px;
+}
+.weui-input {
+  height: 2.58823529em;
+  min-height: 2.58823529em;
+  line-height: 2.58823529em;
+}
+
+// textarea
+<!--index.wxml-->
+<view class="container">
+  <view class="textarea-view">
+    <view>输入区域高度自适应，不会出现滚动条</view>
+    <view class="textarea-wrp">
+      <textarea bindblur="bindTextAreaBlur" auto-height />
+    </view>
+  </view>
+  <view class="textarea-view">
+    <view>这是一个可以自动聚焦的textarea</view>
+    <view class="textarea-wrp">
+      <textarea auto-focus="true" style="height: 3em" />
+    </view>
+  </view>
+</view>
+// index.js
+Page({
+  data: {
+    focus: false
+  },
+  bindTextAreaBlur: function(e) {
+    console.log(e.detail.value);
+  }
+})
+/**index.wxss**/
+.textarea-view {
+  margin-top: 100rpx;
+}
+.textarea-wrp {
+  padding: 0 25rpx;
+  background-color:#fff;
+  margin-top: 40rpx;
+}
+page {
+  background-color:#F8f8f8;
+}
+
+// form
+<!--index.wxml-->
+<view class="page-body">
+  <form catchsubmit="formSubmit" catchreset="formReset">
+    <view class="page-section page-section-gap">
+      <view class="page-section-title">switch</view>
+      <switch name="switch" />
+    </view>
+
+    <view class="page-section page-section-gap">
+      <view class="page-section-title">radio</view>
+      <radio-group name="radio">
+        <label><radio value="radio1">选项一</radio></label>
+        <label><radio value="radio2">选项二</radio></label>
+      </radio-group>
+    </view>
+
+    <view class="page-section page-section-gap">
+      <view class="page-section-title">checkbox</view>
+      <checkbox-group name="checkbox">
+        <label><checkbox value="checkbox1">选项一</checkbox></label>
+        <label><checkbox value="checkbox2">选项二</checkbox></label>
+      </checkbox-group>
+    </view>
+
+    <view class="page-section page-section-gap">
+      <view class="page-section-title">slider</view>
+      <slider value="50" name="slider" show-value></slider>
+    </view>
+
+    <view class="page-section">
+      <view class="page-section-title">input</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cells weui-cell_input">
+          <view class="weui-cell__bd">
+            <input class="weui-input" name="input" placeholder="这是一个输入框"></input>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="btn-area">
+      <button type="primary" formType="submit">Submit</button>
+      <button formType="reset">Reset</button>
+    </view>
+
+  </form>
+</view>
+// index.js
+Page({
+  data: {
+    pickerHidden: true,
+    chosen: ''
+  },
+  pickerConfirm: function(e) {
+    this.setData({
+      pickerHidden: true
+    })
+    this.setData({
+      chosen: e.detail.value
+    })
+  },
+  pickerCancel: function(e) {
+    this.setData({
+      pickerHidden: true
+    })
+  },
+  pickerShow: function(e) {
+    this.setData({
+      pickerHidden: false
+    })
+  },
+  formSubmit: function(e) {
+    console.log('form 发生了 submit 事件，携带数据为：', e.detail.value);
+  },
+  formReset: function(e) {
+    console.log('form 发生了 reset 事件，携带数据为：', e.detail.value);
+    this.setData({
+      chose:''
+    })
+  }
+})
+
+// label
+<!-- index.wxml -->
+<view class="page-body">
+  <view class="page-section page-section-gap">
+    <view class="page-section-title">表单组件在 label 内</view>
+    <checkbox-group class="group" bindchange="checkboxChange">
+      <view class="label-1" wx:for="{{checkboxItems}}">
+        <label>
+          <checkbox value="{{item.name}}" checked="{{item.checked}}"></checkbox>
+          <text class="label-1-text">{{item.value}}</text>
+        </label>
+      </view>
+    </checkbox-group>
+  </view>
+
+  <view class="page-section page-section-gap">
+    <view class="page-section-title">label 用 for 标识表单组件</view>
+    <radio-group class="group" bindchange="radioChange">
+      <view class="label-2" wx:for="{{radioItems}}">
+        <radio id="{{item.name}}" value="{{item.name}}" checked="item.checked"></radio>
+        <label class="label-2-text" for="{{item.name}}">
+          <text>{{item.name}}</text>
+        </label>
+      </view>
+    </radio-group>
+  </view>
+
+  <view class="page-section page-section-gap">
+    <view class="page-section-title">label 内有多个时选中第一个</view>
+    <label class="label-3">
+      <checkbox class="checkbox-3">选项一</checkbox>
+      <checkbox class="checkbox-3">选项二</checkbox>
+    </label>  
+  </view>
+</view>
+// index.js
+Page({
+  data: {
+    checkboxItems: [
+      { name: 'USA', value: '美国'},
+      { name: 'CHN', value: '中国', checked: 'true' }
+    ],
+    radioItems: [
+      { name: 'USA', value: '美国' },
+      { name: 'CHN', value: '中国', checked: 'true' }
+    ],
+    hidden: false
+  },
+  checkboxChange: function(e) {
+    var checked = e.detail.value;
+    var changed = {};
+    for (var i = 0; i < this.data.checkboxItems.length; i++) {
+      if (checked.indexOf(this.data.checkboxItems[i].name) !== -1) {
+        changed['checkboxItems[' + i + '].checked'] = true;
+      } else {
+        changed['checkboxItems[' + i + '].checked'] = false;
+      }
+    }
+    this.setData(changed);
+  },
+  radioChange: function(e) {
+    var checked = e.detail.value;
+    var changed = 0;
+    for (var i = 0; i < this.data.radioItems.length; i++) {
+      if (checked.indexOf(this.data.radioItems[i].name) !== -1) {
+        changed['radioItems[' + i + '].checked'] = true;
+      } else {
+        changed['radioItems[' + i + '].checked'] = false;
+      }
+    }
+    this.setData(changed);
+  },
+  tagEvnet: function(e) {
+    console.log('按钮被点击');
+  }
+})
+
+// picker-view
+<!-- index.wxml -->
+<view>
+  <view>{{year}}年{{month}}月{{day}}日</view>
+  <picker-view indicator-style="height:50px" style="width:100%;height:300px;margin-left:10px;" value="{{value}}" bindchange="bindChange">
+    <picker-view-column>
+      <view wx:for="{{years}}" style="line-height:50px">{{item}}年</view>
+    </picker-view-column>
+    <picker-view-column>
+      <view wx:for="{{months}}" style="line-height:50px">{{item}}月</view>
+    </picker-view-column>
+    <picker-view-column>
+      <view wx:for="{{days}}" style="line-height:50px">{{item}}日</view>
+    </picker-view-column>
+  </picker-view>
+</view>
+// index.js
+const date = new Date();
+const years = [];
+const months = [];
+const days = [];
+
+for (let i = 1990; i <= date.getFullYear(); i++) {
+  years.push(i);
+}
+
+for (let i = 1; i < 12; i++) {
+  months.push(i);
+}
+
+for (let i = 1; i < 31; i++) {
+  days.push(i);
+}
+
+Page({
+  data: {
+    years: years,
+    year: date.getFullYear(),
+    months: months,
+    month: 2,
+    days: days,
+    day: 2,
+    value: [9999, 1, 1],
+  },
+  bindChange: function(e) {
+    const val = e.detail.value;
+    this.setData({
+      year: this.data.years[val[0]],
+      month: this.data.months[val[1]],
+      day: this.data.days[val[2]]
+    })
+  }
+})
+
+// slider
+<!-- index.wxml -->
+<view class="slider">
+  <text>设置 left/right icon</text>
+  <slider bindchange="slider1change" left-icon="cancel" right-icon="success_no_circle"></slider>
+</view>
+<view class="slider">
+  <text>设置 step</text>
+  <slider bindchange="slider2change" step="5"></slider>
+</view>
+<view class="slider">
+  <text>显示当前 value</text>
+  <slider bindchange="slider3change" show-value></slider>
+</view>
+<view class="slider">
+  <text>设置最小/最大值</text>
+  <slider binchange="slider4change" min="50" max="200" show-value></slider>
+</view>
+// index.js
+var pageData = {};
+for (var i = 1; i < 5; ++i) {
+  (function(index){
+    pageData[`slider${index}change`] = function(e) {
+      console.log(`slider${index}发生 change 事件，携带值为`, e.detail.value)
+    }
+  })(i);
+}
+Page(pageData);
+
+// switch
+<!-- index.wxml -->
+<view class="switch-view">
+  <view>type="switch"</view>
+  <view class="switch">
+    <switch checked="{{switch1Checked}}" bindchange="switch1Change"></switch>
+  </view>
+</view>
+<view class="switch=view">
+  <view>type="checkbox"</view>
+  <view class="switch">
+    <switch type="checkbox" checked="{{switch2Checked}}" bindchange="switch2Change"></switch>
+  </view>
+</view>
+// index.js
+var pageData = {
+  data: {
+    switch1Checked: true,
+    switch2Checked: false,
+    switch1Style: '',
+    switch2Style: 'text-decoration: line-through'
+  }
+}
+for (var i = 1; i <= 2; ++i) {
+  (function(index) {
+    pageData[`switch${index}Change`] = function(e) {
+      console.log(`switch${index}发生 change 事件，携带值为`, e.detail.value);
+      var obj = {};
+      obj[`switch${index}Checked`] = e.detail.value;
+      this.setData(obj);
+      obj = {};
+      obj[`switch${index}Style`] = e.detail.value ? '' : 'text-decoration: line-through';
+      this.setData(obj);
+    }
+  })(i);
+}
+Page(pageData);
+
+// 多媒体组件
+// image
+<!-- index.wxml -->
+<view wx:for="{{array}}" wx:for-item="item">
+  <view> {{item.text}}</view>
+  <view class="image">
+    <image style="width:200px;height:200px;background-color:#eeeeee" mode="{{item.mode}}" src="{{src}}"></image>
+  </view>
+</view>
+// index.js
+Page({
+  data: {
+    array: [{
+      mode: 'aspectFit',
+      text: 'aspectFit: 保持纵横比缩放图片，使图片完整的显示出来'
+    }, {
+      mode: 'scaleToFill',
+      text: 'scaleToFill: 不保持纵横比缩放图片，使图片拉伸适应'
+    }, {
+      mode: 'aspectFill',
+      text: 'aspectFill: 保持纵横比缩放图片，只保证图片的短边能完全显示出来'
+    }, {
+      mode: 'top',
+      text: 'top: 不缩放图片，只显示图片的顶部区域'
+    }, {
+      mode: 'bottom',
+      text: 'bottom: 不缩放图片，只显示图片的底部区域'
+    }, {
+      mode: 'center',
+      text: 'center: 不缩放图片，只显示图片的中间区域'
+    }, {
+      mode: 'left',
+      text: 'left: 不缩放图片，只显示图片的左边区域'
+    }, {
+      mode: 'right',
+      text: 'right: 不缩放图片，只显示图片的右边区域'
+    }, {
+      mode: 'top left',
+      text: 'top left: 不缩放图片，只显示图片的左上边区域'
+    }, {
+      mode: 'top right',
+      text: 'top right: 不缩放图片，只显示图片的右上边区域'
+    }, {
+      mode: 'bottom left',
+      text: 'bottom left: 不缩放图片，只显示图片的左下边区域'
+    }, {
+      mode: 'bottom right',
+      text: 'bottom right: 不缩放图片，只显示图片的右下边区域'
+    }],
+    src: '../resources/testImage.png',
+    imageError: function(e) {
+      console.log('image3发生error事件，携带值为', e.detail.errMsg);
+    }
+
+  }
+})
+
+// audio
+<!-- index.wxml -->
+<view class="audio=view">
+  <audio poster="{{poster}}" name="{{name}}" author="{{author}}" src="{{src}}" id="{{myAudio}}" controls loop></audio>
+  <view class="audio-view">
+    <button class="button" type="default" bindtap="audioPlay">播放</button>
+    <button class="button" type="default" bindtap="audiopause">暂停</button>
+    <button class="button" type="default" bindtap="audio14">设置当前播放时间为 14 秒</button>
+    <button class="button" type="default" bindtap="audioStart">回到开头</button>
+  </view>
+</view>
+// index.js
+Page({
+  data: {
+    poster: '音频封面地址',
+    name: '音频名称',
+    author: '音频作者',
+    src: '音频资源地址',
+  },
+  audioPlay: function() {
+    this.audioCtx.play()
+  },
+  audioPause: function() {
+    this.audioCtx.pause()
+  },
+  audio14: function() {
+    this.audioCtx.seek(14)
+  },
+  audioStart: function() {
+    this.audioCtx.seek(0)
+  }
+})
+
+// video 
+<!-- index.wxml -->
+<view class="video-view">
+  <video id="myVideo" src="视频资源地址" damu-list="{{damuList}}" enable-danmu danmu-btn controls></video>
+</view>
+<view class="view">
+  <button bindtap="bindButtonTap">获取视频</button>
+  <view class="view">
+    <view class="weui-cell__hd">
+      <view class="weui-label">弹幕内容</view>
+    </view>
+  </view>
+  <view class="weui-cell__bd">
+    <input bindblur="bindInputBlur" class="input-view" type="text" placeholder="在此处输入弹幕内容"></input>
+    <button class="view" type="primary" bindtap="bindSendDanmu">发送弹幕</button>
+  </view>
+</view>
+// index.js
+function getRandomColor() {
+  let rgb = [];
+  for (let i = 0; i < 3; ++i) {
+    let color = Math.floor(Math.random() * 256).toString(16);
+    color = color.length == 1 ? '0': color;
+    rgb.push(color);
+  }
+  return '#' + rgb.join('');
+}
+Page({
+  inputValue: '',
+  data: {
+    src: '',
+    danmuList: [
+      {
+        text: '第 1s 出现的弹幕',
+        color: '#ff0000',
+        time: 1
+      },
+      {
+        text: '第 3s 出现的弹幕',
+        color: '#ff00ff',
+        time: 3
+      }]
+  },
+  bindButtonTap: function() {
+    var that = this;
+    wx.chooseVideo({
+      sourceType: ['album', 'camera'],
+      maxDuration: 60,
+      camera: ['front', 'back'],
+      success: function (res) {
+        that.setData({
+          src: res.tempFilePath
+        })
+      }
+    })
+  },
+  bindSendDanmu: function() {
+    this.videoContext.sendDanmu({
+      text: this.inputValue,
+      color: getRandomColor()
+    })
+  }
+})
