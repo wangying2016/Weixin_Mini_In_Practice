@@ -927,3 +927,209 @@ Page({
     })
   }
 })
+
+// map
+<!-- index.wxml -->
+<map id="map" longitude="117.20" latitude="39.06" scale="14" controls="{{controls}}" bindcontroltap="controltap" markers="{{markers}}" bindmarkertap="markertap" polyline="{{polyline}}" bindregionchange="regionchange" show-location style="width:100%; height:300px;"></map>
+
+// navigator
+<!-- index.wxml -->
+<view class="viewName">
+  <navigator url="../image/image" hover-class="navigator-hover">
+    <text class="view-Name">image 展示</text>
+  </navigator>
+  <view class="viewName">
+    <navigator url="../audio/audio" hover-class="navigator-hover">
+      <text class="view-Name">audio 展示</text>
+    </navigator>
+  </view>
+  <view class="viewName">
+    <navigator url="../video/video" hover-class="navigator-hover">
+      <text class="view-Name">video 展示</text>
+    </navigator>
+  </view>
+</view>
+
+// canvas
+<view class="container">
+    <!--画布区域-->
+    <view class="canvas_area">
+        <!--注意：同一页面中的 canvas-id 不可重复，如果使用一个已经出现过的 canvas-id，该 canvas 标签对应的画布将被隐藏并不再正常工作-->
+        <canvas canvas-id="myCanvas" class="myCanvas"
+            disable-scroll="false"
+            bindtouchstart="touchStart"
+            bindtouchmove="touchMove"
+            bindtouchend="touchEnd">
+        </canvas>
+    </view>
+    <!--画布工具区域-->
+    <view class="canvas_tools">
+        <view class="pen pen1" bindtap="penSelect" data-param="5">细体</view>
+        <view class="pen pen2" bindtap="penSelect" data-param="15">粗体</view>
+        <view class="pen pen3" bindtap="colorSelect" data-param="#FF3300"></view>
+        <view class="pen pen4" bindtap="colorSelect" data-param="#FFFF00"></view>
+        <view class="pen pen5" bindtap="clearCanvas">清除</view>
+    </view>
+</view>
+Page({
+  data: {
+    pen: 3, //画笔粗细默认值
+    color: '#33CC00' //画笔颜色默认值
+  },
+  startX: 0, //保存X坐标轴变量
+  startY: 0, //保存X坐标轴变量
+  isClear: false, //是否启用橡皮擦标记
+  //手指触摸动作开始
+  touchStart: function (e) {
+    //得到触摸点的坐标
+    this.startX = e.changedTouches[0].x
+    this.startY = e.changedTouches[0].y
+    this.context = wx.createContext()
+
+    if (this.isClear) { //判断是否启用的橡皮擦功能  ture表示清除  false表示画画
+      this.context.setStrokeStyle('#F8F8F8') //设置线条样式 此处设置为画布的背景颜色  清除按钮原理就是：利用擦过的地方被填充为画布的背景颜色一致 从而达到清除的效果 
+      this.context.setLineCap('round') //设置线条端点的样式
+      this.context.setLineJoin('round') //设置两线相交处的样式
+      this.context.setLineWidth(20) //设置线条宽度
+      this.context.save();  //保存当前坐标轴的缩放、旋转、平移信息
+      this.context.beginPath() //开始一个路径 
+      this.context.arc(this.startX, this.startY, 5, 0, 2 * Math.PI, true);  //添加一个弧形路径到当前路径，顺时针绘制  这里总共画了360度  也就是一个圆形 
+      this.context.fill();  //对当前路径进行填充
+      this.context.restore();  //恢复之前保存过的坐标轴的缩放、旋转、平移信息
+    } else {
+      this.context.setStrokeStyle(this.data.color)
+      this.context.setLineWidth(this.data.pen)
+      this.context.setLineCap('round') // 让线条圆润 
+      this.context.beginPath()
+
+    }
+  },
+  //手指触摸后移动
+  touchMove: function (e) {
+
+    var startX1 = e.changedTouches[0].x
+    var startY1 = e.changedTouches[0].y
+
+    if (this.isClear) { //判断是否启用的橡皮擦功能  ture表示清除  false表示画画
+
+      this.context.save();  //保存当前坐标轴的缩放、旋转、平移信息
+      this.context.moveTo(this.startX, this.startY);  //把路径移动到画布中的指定点，但不创建线条
+      this.context.lineTo(startX1, startY1);  //添加一个新点，然后在画布中创建从该点到最后指定点的线条
+      this.context.stroke();  //对当前路径进行描边
+      this.context.restore()  //恢复之前保存过的坐标轴的缩放、旋转、平移信息
+
+      this.startX = startX1;
+      this.startY = startY1;
+
+    } else {
+      this.context.moveTo(this.startX, this.startY)
+      this.context.lineTo(startX1, startY1)
+      this.context.stroke()
+
+      this.startX = startX1;
+      this.startY = startY1;
+
+    }
+    //只是一个记录方法调用的容器，用于生成记录绘制行为的actions数组。context跟<canvas/>不存在对应关系，一个context生成画布的绘制动作数组可以应用于多个<canvas/>
+    wx.drawCanvas({
+      canvasId: 'myCanvas',
+      reserve: true,
+      actions: this.context.getActions() // 获取绘图动作数组
+    })
+  },
+  //手指触摸动作结束
+  touchEnd: function () {
+
+  },
+  //启动清除按钮方法
+  clearCanvas: function () {
+    if (this.isClear) {
+      this.isClear = false;
+    } else {
+      this.isClear = true;
+    }
+  },
+  penSelect: function (e) { //更改画笔大小的方法
+    console.log(e.currentTarget);
+    this.setData({ pen: parseInt(e.currentTarget.dataset.param) });
+    this.isClear = false;
+  },
+  colorSelect: function (e) { //更改画笔颜色的方法
+    console.log(e.currentTarget);
+    this.setData({ color: e.currentTarget.dataset.param });
+    this.isClear = false;
+  }
+})
+page{
+    height: 100%;
+}
+
+.container{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.canvas_area{
+    width: 100%;
+    height: 100%;
+    background-color: #F8F8F8;
+}
+.myCanvas{
+    width: 100%;
+    height: 100%;
+}
+
+.canvas_tools{
+    position: fixed;
+    left: 0;
+    bottom: 20rpx;
+    width: 100%;
+    height: 100rpx;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.pen{
+    width: 100rpx;
+    height: 100rpx;
+    border-radius: 20%;
+    background-color: rebeccapurple;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pen1{
+    background-color: #33CC00;
+    background-repeat:no-repeat;
+    background-position: center;
+}
+
+.pen2{
+    background-color: #33CC00;
+    background-repeat:no-repeat;
+    background-position: center;
+}
+
+.pen3{
+    background-color: #FF3300;
+}
+
+.pen4{
+    background-color: #FFFF00;
+}
+
+.pen5{
+    background-color: #cccccc;
+    background-repeat:no-repeat;
+    background-position: center;
+}
+
+// contact-button
+<contact-button
+  type="default-light"
+  size="20"
+  session-from="weapp"
+>
+</contact-button>
